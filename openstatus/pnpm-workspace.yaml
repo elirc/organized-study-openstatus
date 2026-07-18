@@ -1,0 +1,5 @@
+packages:
+  - "apps/*"
+  - "packages/**/*"
+  - "packages/config/*"
+trustPolicy: "off" # temporary, can't pnpm install right now, need to update a bunch of packages to remove this

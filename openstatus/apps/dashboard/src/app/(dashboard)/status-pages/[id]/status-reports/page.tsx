@@ -1,0 +1,128 @@
+"use client";
+
+import { Link } from "@/components/common/link";
+import {
+  Section,
+  SectionDescription,
+  SectionGroup,
+  SectionHeader,
+  SectionHeaderRow,
+  SectionTitle,
+} from "@/components/content/section";
+import { DataTable as UpdatesDataTable } from "@/components/data-table/status-report-updates/data-table";
+import { columns } from "@/components/data-table/status-reports/columns";
+import { FormSheetStatusReport } from "@/components/forms/status-report/sheet";
+import { toCheckboxTreeItems } from "@/components/ui/checkbox-tree";
+import { DataTable } from "@/components/ui/data-table/data-table";
+import { useTRPC } from "@/lib/trpc/client";
+import { Button } from "@openstatus/ui/components/ui/button";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { useParams } from "next/navigation";
+
+export default function Page() {
+  const { id } = useParams<{ id: string }>();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const { data: page } = useQuery(
+    trpc.page.get.queryOptions({ id: Number.parseInt(id) }),
+  );
+  const { data: statusReports, refetch } = useQuery(
+    trpc.statusReport.list.queryOptions({ pageId: Number.parseInt(id) }),
+  );
+  const sendStatusReportUpdateMutation = useMutation(
+    trpc.emailRouter.sendStatusReport.mutationOptions(),
+  );
+  const createStatusReportMutation = useMutation(
+    trpc.statusReport.create.mutationOptions({
+      onSuccess: async (statusReport) => {
+        // TODO: move to server
+        if (statusReport.notifySubscribers) {
+          await sendStatusReportUpdateMutation.mutateAsync({
+            id: statusReport.id,
+          });
+        }
+        //
+        refetch();
+        queryClient.invalidateQueries({
+          queryKey: trpc.page.list.queryKey(),
+        });
+      },
+    }),
+  );
+
+  if (!statusReports || !page) return null;
+
+  const hasUnresolvedIssue = statusReports.some(
+    (report) => report.status !== "resolved",
+  );
+
+  return (
+    <SectionGroup>
+      <Section>
+        <SectionHeaderRow>
+          <SectionHeader>
+            <SectionTitle>{page.title}</SectionTitle>
+            <SectionDescription>
+              List of all status reports. Looking for{" "}
+              <Link href={`/status-pages/${id}/maintenances`}>
+                maintenances
+              </Link>
+              ?
+            </SectionDescription>
+          </SectionHeader>
+          <div>
+            <FormSheetStatusReport
+              warning={
+                hasUnresolvedIssue ? (
+                  <>
+                    An unresolved report already exists. Consider adding a{" "}
+                    <span className="font-semibold">status report update</span>{" "}
+                    instead.
+                  </>
+                ) : undefined
+              }
+              items={toCheckboxTreeItems(
+                page.pageComponents,
+                page.pageComponentGroups,
+              )}
+              onSubmit={async (values) => {
+                // NOTE: for type safety, we need to check if the values have a date property
+                // because of the union type
+                if ("date" in values) {
+                  await createStatusReportMutation.mutateAsync({
+                    title: values.title,
+                    status: values.status,
+                    pageId: Number.parseInt(id),
+                    pageComponents: values.pageComponents,
+                    date: values.date,
+                    message: values.message,
+                    notifySubscribers: values.notifySubscribers,
+                  });
+                }
+              }}
+            >
+              <Button data-section="action" size="sm">
+                <Plus />
+                Create Status Report
+              </Button>
+            </FormSheetStatusReport>
+          </div>
+        </SectionHeaderRow>
+        <DataTable
+          columns={columns}
+          data={statusReports}
+          onRowClick={(row) =>
+            row.getCanExpand() ? row.toggleExpanded() : undefined
+          }
+          rowComponent={({ row }) => (
+            <UpdatesDataTable
+              updates={row.original.updates}
+              reportId={row.original.id}
+            />
+          )}
+        />
+      </Section>
+    </SectionGroup>
+  );
+}
