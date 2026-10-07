@@ -83,7 +83,7 @@ Six incident simulations. Each gives you the page as you'd receive it on call, t
 **Your job:** Resolve the docs' standing bug-suspicion with evidence: does the cron selection query exclude soft-deleted monitors?
 
 <details><summary>Hint 1</summary>The selection query is `apps/workflows/src/cron/checker.ts:98-108`. Read the actual WHERE clauses. What does it filter on — and is `deletedAt` among them?</details>
-<details><summary>Hint 2</summary>Now check the delete verb: does `packages/services/src/monitor/remove.ts` (or equivalent) set `active=false` as well as `deletedAt`? If yes, the scheduler is *accidentally* safe; if no, ghosts.</details>
+<details><summary>Hint 2</summary>Now check the delete verb: does `packages/services/src/monitor/delete.ts` (and the v1 route `apps/server/src/routes/v1/monitors/delete.ts`) set `active=false` as well as `deletedAt`? If yes, the scheduler is *accidentally* safe; if no, ghosts.</details>
 <details><summary>Hint 3</summary>"Accidentally safe" is a finding too: the invariant holds only because two independent code sites cooperate. What single-line change makes it structural, and what test pins it?</details>
 
 **Resolution criteria:** A definitive answer with file:line evidence for both the query and the delete verb; the legal/illegal table for the 8 (active × status × deleted) states; and either the bug ticket (with the fix and its test) or the hardening ticket (make the query filter `deletedAt` regardless, plus a test asserting soft-deleted monitors never enqueue). Any answer without having read both sites is a fail regardless of correctness.

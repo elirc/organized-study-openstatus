@@ -31,7 +31,7 @@ If you're already comfortable with the language and just want the codebase, skim
 
 ## Conventions in this guide
 
-- **File anchors** look like [`packages/services/src/status-report/create.ts:24-99`](packages/services/src/status-report/create.ts#L24-L99). Open them as you read. Reading commentary about code you haven't opened is wasted time.
+- **File anchors** look like [`packages/services/src/status-report/create.ts:24-99`](../packages/services/src/status-report/create.ts#L24-L99). Open them as you read. Reading commentary about code you haven't opened is wasted time.
 - **Illustrative code** is labeled. Real code from the repo is quoted with a file path; everything else is a teaching sketch.
 - **Senior-mindset asides** are short, italicized notes about what a senior would notice that a junior wouldn't — often the thing that separates levels.
 - **Drills** are open-ended. They aren't quizzes with answer keys; the goal is to build the reflex of asking the question.
@@ -48,7 +48,7 @@ If you're already comfortable with the language and just want the codebase, skim
 | 05 | [`05-quality-engineering/`](05-quality-engineering/README.md) | Testing strategy, writing tests in this repo, debugging by deduction, performance, and security. |
 | 06 | [`06-practice-tracks/`](06-practice-tracks/README.md) | Reading katas, modify tickets, build projects, and senior-level refactor/design exercises. |
 | 07 | [`07-career-skills/`](07-career-skills/README.md) | Code review, PR writing, RFCs, and interviews — using this codebase as material. |
-| ⨯ | [`critique-of-codex-docs.md`](critique-of-codex-docs.md) | Where the prior `docs/` (Codex) effort succeeded and where it falls short — included so you can read the docs critically and learn from both. |
+| ⨯ | [`CRITIQUE-codex-vs-claude.md`](../CRITIQUE-codex-vs-claude.md) (moved to the repo root in this snapshot) | Where the prior `docs/` (Codex) effort succeeded and where it falls short — included so you can read the docs critically and learn from both. |
 
 ## The senior mindset, in one paragraph
 

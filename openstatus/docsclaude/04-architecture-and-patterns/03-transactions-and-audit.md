@@ -37,7 +37,7 @@ export async function withTransaction<T>(
 
 Two behaviors:
 
-- If the caller's `ctx.db` is already a transaction (a higher-level service started one), reuse it. Nested calls join the existing tx instead of starting a new one — which would either fail (libsql HTTP doesn't support savepoints) or break atomicity.
+- If the caller's `ctx.db` is already a transaction (a higher-level service started one), reuse it. Nested calls join the existing tx instead of starting a new one — which would at best open a second, independent transaction (breaking atomicity with the outer one) and at worst fail, depending on the driver's nested-transaction support — `isTx` (`packages/services/src/context.ts:36-38`) is what prevents that by detecting a `SQLiteTransaction` and calling `fn(db)` directly (line 45).
 - Otherwise, open a fresh transaction.
 
 This is what lets one service call another and still have the whole thing be atomic. The outer service opens; the inner sees `ctx.db = tx` and *uses* it.

@@ -189,7 +189,7 @@ Apply these rules to **every** file you write.
 
 Format file references as Markdown links the IDE can open:
 ```
-[packages/services/src/status-report/create.ts:24-99](packages/services/src/status-report/create.ts#L24-L99)
+[packages/services/src/status-report/create.ts:24-99](../packages/services/src/status-report/create.ts#L24-L99)
 ```
 - Always include the line range, not just the file.
 - Prefer narrow ranges (~5–30 lines) over wide ones (>100). Narrow ranges teach precision.

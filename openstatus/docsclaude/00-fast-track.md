@@ -23,14 +23,14 @@ The status report create flow is the best one to trace because it touches everyt
 
 Open these files **in this order** with the comments in [`02-react-deep-dive/06-react-query-and-trpc.md`](02-react-deep-dive/06-react-query-and-trpc.md) and [`04-architecture-and-patterns/01-layering-and-services.md`](04-architecture-and-patterns/01-layering-and-services.md) handy:
 
-1. [`apps/dashboard/src/app/(dashboard)/status-pages/[id]/status-reports/page.tsx`](apps/dashboard/src/app/(dashboard)/status-pages/[id]/status-reports/page.tsx) — UI submits, then invalidates caches on success.
-2. [`apps/dashboard/src/components/forms/status-report/form.tsx`](apps/dashboard/src/components/forms/status-report/form.tsx) — react-hook-form + Zod resolver.
-3. [`apps/dashboard/src/lib/trpc/client.tsx`](apps/dashboard/src/lib/trpc/client.tsx) and [`apps/dashboard/src/lib/trpc/shared.ts`](apps/dashboard/src/lib/trpc/shared.ts) — typed client + edge/lambda link routing.
-4. [`packages/api/src/router/statusReport.ts`](packages/api/src/router/statusReport.ts) — protected procedure, input validation, service adapter.
-5. [`packages/api/src/service-adapter.ts`](packages/api/src/service-adapter.ts) — `toServiceCtx` and `toTRPCError` are the boundary.
-6. [`packages/services/src/status-report/create.ts`](packages/services/src/status-report/create.ts) — `requireScope`, workspace check, transaction, audit emit.
-7. [`packages/services/src/context.ts`](packages/services/src/context.ts) — `withTransaction` and the `Actor` discriminated union.
-8. [`packages/db/src/schema/status_reports/status_reports.ts`](packages/db/src/schema/status_reports/status_reports.ts) — Drizzle schema.
+1. [`apps/dashboard/src/app/(dashboard)/status-pages/[id]/status-reports/page.tsx`](../apps/dashboard/src/app/(dashboard)/status-pages/[id]/status-reports/page.tsx) — UI submits, then invalidates caches on success.
+2. [`apps/dashboard/src/components/forms/status-report/form.tsx`](../apps/dashboard/src/components/forms/status-report/form.tsx) — react-hook-form + Zod resolver.
+3. [`apps/dashboard/src/lib/trpc/client.tsx`](../apps/dashboard/src/lib/trpc/client.tsx) and [`apps/dashboard/src/lib/trpc/shared.ts`](../apps/dashboard/src/lib/trpc/shared.ts) — typed client + edge/lambda link routing.
+4. [`packages/api/src/router/statusReport.ts`](../packages/api/src/router/statusReport.ts) — protected procedure, input validation, service adapter.
+5. [`packages/api/src/service-adapter.ts`](../packages/api/src/service-adapter.ts) — `toServiceCtx` and `toTRPCError` are the boundary.
+6. [`packages/services/src/status-report/create.ts`](../packages/services/src/status-report/create.ts) — `requireScope`, workspace check, transaction, audit emit.
+7. [`packages/services/src/context.ts`](../packages/services/src/context.ts) — `withTransaction` and the `Actor` discriminated union.
+8. [`packages/db/src/schema/status_reports/status_reports.ts`](../packages/db/src/schema/status_reports/status_reports.ts) — Drizzle schema.
 
 Now write a one-page explanation in your own words: what happens between "user clicks Create" and "DB row exists." Don't skip this. Writing forces precision.
 
@@ -52,7 +52,7 @@ The pattern you should follow on every change:
 
 ## Sunday afternoon (2h) — Read with a critical eye
 
-Read [`critique-of-codex-docs.md`](critique-of-codex-docs.md). Then re-open one of your favorite files from earlier and ask: *what would a senior change about this?* If you can find one real critique with a concrete fix, the weekend was worth it.
+Read [`CRITIQUE-codex-vs-claude.md`](../CRITIQUE-codex-vs-claude.md) (moved to the repo root in this snapshot). Then re-open one of your favorite files from earlier and ask: *what would a senior change about this?* If you can find one real critique with a concrete fix, the weekend was worth it.
 
 ## What this doesn't cover
 
